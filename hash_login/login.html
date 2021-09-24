@@ -1,0 +1,145 @@
+<html>
+
+<head>
+    <title>
+        Security Login
+    </title>
+</head>
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    form {
+        max-width: 500px;
+        width: 70%;
+        padding: 20px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    form h3 {
+        text-align: center;
+        font-size: 35px;
+    }
+    
+    input[type=text],
+    input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+    
+    button {
+        background-color: #04AA6D;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+    
+    button[name='create-button'] {
+        background-color: #0F2930;
+    }
+    
+    button[name='button1'] {
+        background-color: #1D817F;
+    }
+    
+    button[name='button2'] {
+        background-color: #2A96B5;
+    }
+    
+    button[name='button3'] {
+        background-color: #177892;
+    }
+    
+    #outer {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .inner {
+        display: inline-block;
+    }
+</style>
+
+
+<body>
+    <form action="Submit.aspx" onsubmit="return false;">
+        <h3>Login</h3>
+        <input type="text" id="username" placeholder="username" />
+        <input type="password" id="password" placeholder="password" />
+        <div id='outer'>
+            <div class='inner'>
+                <button type="submit" id="button1" name="button1">Submit Clear</button>
+            </div>
+            <div class='inner'>
+                <button type="submit" id="button2" name="button2">Submit Hash</button>
+            </div>
+            <div class='inner'>
+                <button type="submit" id="button3" name="button3">Submit Hash+Salt</button>
+            </div>
+        </div>
+        <button type="submit" id="create-button" name="create-button">Create user</button>
+    </form>
+
+</body>
+
+<script>
+    const createButton = document.getElementById('create-button');
+    const button1 = document.getElementById('button1');
+    const button2 = document.getElementById('button2');
+    const button3 = document.getElementById('button3');
+
+    function sendRequest(type) {
+
+        let data = {
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value,
+            type: type
+        };
+
+        fetch("/", {
+            method: "POST",
+            body: JSON.stringify(data)
+        }).then(res => {
+
+            if (res.status == 200) {
+                alert('Authentic user!')
+            } else {
+                alert('User is not authentic!')
+            }
+
+        });
+
+        return false;
+    }
+
+    button1.onclick = function() {
+        sendRequest('clear');
+    }
+
+    button2.onclick = function() {
+        sendRequest('hash');
+    }
+
+    button3.onclick = function() {
+        sendRequest('hash+salt');
+    }
+
+    createButton.onclick = function() {
+        window.location.href = 'http://localhost:8080/create/'
+    }
+</script>
+
+
+</html>
